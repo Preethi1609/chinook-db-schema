@@ -1,3 +1,178 @@
+-- create table
+
+CREATE TABLE artists
+(
+    id INT NOT NULL,
+    name VARCHAR(120),
+    CONSTRAINT pk_artist PRIMARY KEY  (id)
+);
+
+CREATE TABLE albums
+(
+    id INT NOT NULL,
+    title VARCHAR(160) NOT NULL,
+    artist_id INT NOT NULL,
+    CONSTRAINT pk_album PRIMARY KEY  (id)
+);
+
+CREATE TABLE customers
+(
+    id INT NOT NULL,
+    first_name VARCHAR(40) NOT NULL,
+    last_name VARCHAR(20) NOT NULL,
+    company VARCHAR(80),
+    address VARCHAR(70),
+    city VARCHAR(40),
+    state VARCHAR(40),
+    country VARCHAR(40),
+    postal_code VARCHAR(10),
+    phone VARCHAR(24),
+    Fax VARCHAR(24),
+    Email VARCHAR(60) NOT NULL,
+    support_rep_id INT,
+    CONSTRAINT pk_customer PRIMARY KEY  (id)
+);
+
+CREATE TABLE genres
+(
+    id INT NOT NULL,
+    name VARCHAR(120),
+    CONSTRAINT pk_genre PRIMARY KEY  (id)
+);
+
+CREATE TABLE invoices
+(
+    id INT NOT NULL,
+    customer_id INT NOT NULL,
+    invoice_date TIMESTAMP NOT NULL,
+    billing_address VARCHAR(70),
+    billing_city VARCHAR(40),
+    billing_state VARCHAR(40),
+    billing_country VARCHAR(40),
+    billing_postal_code VARCHAR(10),
+    total NUMERIC(10,2) NOT NULL,
+    CONSTRAINT pk_invoice PRIMARY KEY  (id)
+);
+
+CREATE TABLE invoices_lines
+(
+    id INT NOT NULL,
+    invoice_id INT NOT NULL,
+    track_id INT NOT NULL,
+    unit_price NUMERIC(10,2) NOT NULL,
+    quantity INT NOT NULL,
+    CONSTRAINT pk_invoice_line PRIMARY KEY  (id)
+);
+
+CREATE TABLE media_types
+(
+    id INT NOT NULL,
+    name VARCHAR(120),
+    CONSTRAINT pk_media_type PRIMARY KEY  (id)
+);
+
+CREATE TABLE playlists
+(
+    id INT NOT NULL,
+    name VARCHAR(120),
+    CONSTRAINT pk_playlist PRIMARY KEY  (id)
+);
+
+CREATE TABLE playlist_track
+(
+    playlist_id INT NOT NULL,
+    track_id INT NOT NULL,
+    CONSTRAINT pk_playlist_track PRIMARY KEY  (playlist_id, track_id)
+);
+
+CREATE TABLE tracks
+(
+    id INT NOT NULL,
+    name VARCHAR(200) NOT NULL,
+    album_id INT,
+    media_type_id INT NOT NULL,
+    genre_id INT,
+    composer VARCHAR(220),
+    milliseconds INT NOT NULL,
+    bytes INT,
+    unit_price NUMERIC(10,2) NOT NULL,
+    CONSTRAINT pk_track PRIMARY KEY  (id)
+);
+
+CREATE TABLE employees
+(
+    id INT NOT NULL,
+    last_name VARCHAR(20) NOT NULL,
+    first_name VARCHAR(20) NOT NULL,
+    title VARCHAR(30),
+    reports_to INT,
+    birth_date TIMESTAMP,
+    hire_date TIMESTAMP,
+    address VARCHAR(70),
+    city VARCHAR(40),
+    state VARCHAR(40),
+    country VARCHAR(40),
+    postal_code VARCHAR(10),
+    phone VARCHAR(24),
+    fax VARCHAR(24),
+    email VARCHAR(60),
+    CONSTRAINT pk_employee PRIMARY KEY  (id)
+);
+
+-- alter and index queries
+
+ALTER TABLE employees ADD CONSTRAINT fk_employee_reports_to
+    FOREIGN KEY (reports_to) REFERENCES employees (employee_id) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE invoices ADD CONSTRAINT fk_invoice_customer_id
+    FOREIGN KEY (customer_id) REFERENCES customers (id) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE invoice_lines ADD CONSTRAINT fk_invoice_line_invoice_id
+    FOREIGN KEY (invoice_id) REFERENCES invoices (id) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE playlist_track ADD CONSTRAINT fk_playlist_track_playlist_id
+    FOREIGN KEY (playlist_id) REFERENCES playlists (id) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE playlist_track ADD CONSTRAINT fk_playlist_tracktrack_id
+    FOREIGN KEY (track_id) REFERENCES tracks (id) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE albums ADD CONSTRAINT fk_album_artist_id
+    FOREIGN KEY (artist_id) REFERENCES artists (id) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE tracks ADD CONSTRAINT fk_track_album_id
+    FOREIGN KEY (album_id) REFERENCES albums (id) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE tracks ADD CONSTRAINT fk_track_genre_id
+    FOREIGN KEY (genre_id) REFERENCES genres (id) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE tracks ADD CONSTRAINT fk_track_media_type_id
+    FOREIGN KEY (media_type_id) REFERENCES media_types (id) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE customers ADD CONSTRAINT fk_customer_support_rep_id
+    FOREIGN KEY (support_rep_id) REFERENCES employees (employee_id) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+CREATE INDEX ifk_customer_support_rep_id ON customers (support_rep_id);
+
+CREATE INDEX ifk_employee_reports_to ON employees (reports_to);
+
+CREATE INDEX ifk_invoice_customer_id ON invoice (customer_id);
+
+CREATE INDEX ifk_invoice_line_invoice_id ON invoice_line (invoice_id);
+
+CREATE INDEX ifk_invoice_line_track_id ON invoice_line (id);
+
+CREATE INDEX ifk_playlist_tracktrack_id ON paylist_track (track_id);
+
+CREATE INDEX ifk_album_artist_id ON albums (id);
+
+CREATE INDEX ifk_track_album_Id ON tracks (Id);
+
+CREATE INDEX ifk_track_media_type_id ON tracks (media_type_id);
+
+CREATE INDEX ifk_track_genre_id ON tracks (id);
+
+-- insert queries
+
 INSERT INTO genre (id, name) VALUES (1, N'Rock');
 INSERT INTO genre (id, name) VALUES (2, N'Jazz');
 INSERT INTO genre (id, name) VALUES (3, N'Metal');
