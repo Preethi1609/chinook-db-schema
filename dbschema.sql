@@ -169,11 +169,11 @@ CREATE INDEX ifk_employee_reports_to ON employees (reports_to);
 
 CREATE INDEX ifk_invoice_customer_id ON invoices (customer_id);
 
-CREATE INDEX ifk_invoice_line_invoice_id ON invoice_line (invoice_id);
+CREATE INDEX ifk_invoice_line_invoice_id ON invoices_lines (invoice_id);
 
-CREATE INDEX ifk_invoice_line_track_id ON invoice_line (id);
+CREATE INDEX ifk_invoice_line_track_id ON invoices_lines (id);
 
-CREATE INDEX ifk_playlist_tracktrack_id ON paylist_track (track_id);
+CREATE INDEX ifk_playlist_tracktrack_id ON playlist_track (track_id);
 
 CREATE INDEX ifk_album_artist_id ON albums (id);
 
